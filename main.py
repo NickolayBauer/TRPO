@@ -2,25 +2,37 @@ import random
 
 
 def create_matrix():
-    flag = flag_too = False
+    flag = False
+
     while flag == False:
+        flag = True
+        flag2 = False
         try:
-            while flag_too == False:
+            while flag2 == False:
+                flag2 = True
                 n = int(input("Введите размерность матрицы: "))
-                if n > 1:
-                    flag_too = True
+                matrix = []
+                if n < 1:
+                    flag = flag2 = False
+                    print("Введите корректное количество элементов матрицы (больше 0)")
                 else:
-                   print( "Попробуйте скорректировать ввод")
-            print("Введите элементы матрицы: ")
-
-
-            matrix =[[int(j) for j in input().split()] for i in range(n)]
-
-
-
-            flag = True
+                    print("Введите элементы матрицы: ")
+                    for i in range(n):
+                        flag3 = False
+                        while flag3 == False:
+                            row = input().split()
+                            row = [int(elem) for elem in row]
+                            if len(row) != n:
+                                print("ошибка в количестве элементов в строке\nПовторите ввод")
+                                flag3 = False
+                            else:
+                                matrix.append(row)
+                                flag3 = True
         except ValueError:
-            print("Что-то не так с вводом матрицы, попробуйте ещё раз")
+            print("Пожалуйста, не вводите буквы в матрицу ")
+            flag = False
+
+
     return matrix
 
 
@@ -47,7 +59,7 @@ def show_matrix(matrix):
 
 
 def check(matrix):
-    lowd = uppd = maind = alld = 0
+    i = j = lowd = uppd = maind = alld = 0
     n = len(matrix)
 
     for i in range(n):
@@ -57,14 +69,13 @@ def check(matrix):
             if matrix[n - i - 1][n - j - 1] == 0:
                 uppd += 1
             alld += 1
-    for i in range(n):
+
         if matrix[i][i] == 0:
             maind += 1
 
-
     print("\nКоличество нулевых элементов НИЖЕ главной диагонали: ", lowd)
     print("Количество нулевых элементов ВЫШЕ главной диагонали: ", uppd)
-    print("Количество нулевых элементов в ГЛАВНОЙ диагонали: ", maind,"\n")
+    print("Количество нулевых элементов в ГЛАВНОЙ диагонали: ", maind, "\n")
     if (lowd == alld) and (uppd == alld) and (maind == n):
         print("Нулевая матрица")
     elif (lowd == alld) and (uppd == alld):
@@ -76,7 +87,7 @@ def check(matrix):
     else:
         print("Матрица нетреугольная")
 
-
-matrix = create_matrix()
-show_matrix(matrix)
-check(matrix)
+while True:
+    matrix = create_matrix()
+    show_matrix(matrix)
+    check(matrix)
