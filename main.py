@@ -1,44 +1,51 @@
+###################
+#matrix - матрица
+#row - строка матрицы
+#elem - елемент матрицы
+#n - размерность матрицы
+#maxx - значение максимального по модулю элемента матрицы
 class NewMatrix:
     def __init__(self):
         matrix = []
         self.matrix = matrix
 
-
-    def create_matrix(self,matrix):
-        flag = False
-
-        while flag == False:
-            flag = True
-            flag2 = False
+    def create_matrix(self, matrix):
+        def first_check():
             try:
-                while flag2 == False:
-                    flag2 = True
-                    n = int(input("Введите размерность матрицы: "))
-                    self.matrix = []
-                    if n < 1:
-                        flag = flag2 = False
-                        print("Введите корректное количество элементов матрицы (больше 0)")
-                    else:
-                        print("Введите элементы матрицы: ")
-                        for i in range(n):
-                            flag3 = False
-                            while flag3 == False:
-                                row = input().split()
-                                row = [int(elem) for elem in row]
-                                if len(row) != n:
-                                    print("ошибка в количестве элементов в строке\nПовторите ввод")
-                                    flag3 = False
-                                else:
-                                    self.matrix.append(row)
-                                    flag3 = True
+                n = int(input("Введите размерность матрицы: "))
+                if (n < 1) or (n > 1000000000):
+                    print("Число значений не может быть равно ", n)
+                    return False
+                return n
             except ValueError:
-                print("Пожалуйста, не вводите буквы в матрицу ")
-                flag = False
+                print("Количество элементов не может содержать буквы и специальные символы")
+                return False
 
+        def second_check(n):
+            try:
+                row = [float(elem) for elem in input().split()]
+                if len(row) < n:
+                    print("Неверное количество элементов в строке")
+                    return False
+                return row
+            except ValueError:
+                print("Ни один из элементов строки не может быть буквой или содержать специальные символы")
+                return False
+
+        n = False
+        while not n:
+            n = first_check()
+
+        print("Введите элементы в строку")
+        for i in range(n):
+            row = False
+            while not row:
+                row = second_check(n)
+            self.matrix.append(row)
 
         return self.matrix
 
-    def show_matrix(self,matrix):
+    def show_matrix(self, matrix):
         maxx = 0
 
         for row in self.matrix:
@@ -49,17 +56,15 @@ class NewMatrix:
         for row in self.matrix:
             print('|' + '|'.join([str(elem).rjust(len(str(maxx)) + 2) for elem in row]) + '|')
 
-
-    def check(self,matrix):
+    def check(self, matrix):
 
         i = j = lowd = uppd = maind = alld = 0
-        n = len(self.matrix)
 
-        for i in range(n):
+        for i in range(len(self.matrix)):
             for j in range(i):
                 if self.matrix[i][j] == 0:
                     lowd += 1
-                if self.matrix[n - i - 1][n - j - 1] == 0:
+                if self.matrix[len(self.matrix) - i - 1][len(self.matrix) - j - 1] == 0:
                     uppd += 1
                 alld += 1
 
@@ -69,7 +74,7 @@ class NewMatrix:
         print("\nКоличество нулевых элементов НИЖЕ главной диагонали: ", lowd)
         print("Количество нулевых элементов ВЫШЕ главной диагонали: ", uppd)
         print("Количество нулевых элементов в ГЛАВНОЙ диагонали: ", maind, "\n")
-        if (lowd == alld) and (uppd == alld) and (maind == n):
+        if (lowd == alld) and (uppd == alld) and (maind == len(self.matrix)):
             print("Нулевая матрица")
         elif (lowd == alld) and (uppd == alld):
             print("Диагональная матрица")
@@ -80,11 +85,10 @@ class NewMatrix:
         else:
             print("Матрица нетреугольная")
 
+
 while True:
     A = []
     my_matrix = NewMatrix()
     my_matrix.create_matrix(A)
     my_matrix.show_matrix(A)
     my_matrix.check(A)
-
-
